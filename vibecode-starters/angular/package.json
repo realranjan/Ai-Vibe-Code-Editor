@@ -1,1 +1,7 @@
-{"name":"angular-starter"}
+{
+  "name": "angular-starter",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  }
+}

@@ -1,1 +1,10 @@
-{"name":"hono-starter","dependencies":{"hono":"latest"}}
+{
+  "name": "hono-starter",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "hono": "latest"
+  }
+}
