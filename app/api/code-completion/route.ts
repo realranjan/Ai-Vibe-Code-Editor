@@ -146,7 +146,7 @@ async function generateSuggestion(prompt: string): Promise<string> {
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "groq/compound",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         max_tokens: 300,

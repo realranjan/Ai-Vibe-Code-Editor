@@ -32,7 +32,7 @@ Always provide clear, practical answers. Use proper code formatting when showing
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "groq/compound",
         messages: fullMessages,
         temperature: 0.7,
         max_tokens: 1000,
