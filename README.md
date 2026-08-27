@@ -1,122 +1,93 @@
-# 🧠 Vibecode Editor – AI-Powered Web IDE
+# ⚡ Chai Vibe Editor
 
-![Vibecode Editor Thumbnail](public/vibe-code-editor-thumbnaail.svg)
+An advanced, browser-native AI-powered code editor built on top of **WebContainers**, empowering developers to spin up full-stack development environments (React, Next.js, Express, Vue, Angular) directly in the browser—no remote VMs required.
 
-**Vibecode Editor** is a blazing-fast, AI-integrated web IDE built entirely in the browser using **Next.js App Router**, **WebContainers**, **Monaco Editor**, and **local LLMs via Ollama**. It offers real-time code execution, an AI-powered chat assistant, and support for multiple tech stacks — all wrapped in a stunning developer-first UI.
-
----
-
-## 🚀 Features
-
-- 🔐 **OAuth Login with NextAuth** – Supports Google & GitHub login.
-- 🎨 **Modern UI** – Built with TailwindCSS & ShadCN UI.
-- 🌗 **Dark/Light Mode** – Seamlessly toggle between themes.
-- 🧱 **Project Templates** – Choose from React, Next.js, Express, Hono, Vue, or Angular.
-- 🗂️ **Custom File Explorer** – Create, rename, delete, and manage files/folders easily.
-- 🖊️ **Enhanced Monaco Editor** – Syntax highlighting, formatting, keybindings, and AI autocomplete.
-- 💡 **AI Suggestions with Ollama** – Local models give you code completion on `Ctrl + Space` or double `Enter`. Accept with `Tab`.
-- ⚙️ **WebContainers Integration** – Instantly run frontend/backend apps right in the browser.
-- 💻 **Terminal with xterm.js** – Fully interactive embedded terminal experience.
-- 🤖 **AI Chat Assistant** – Share files with the AI and get help, refactors, or explanations.
+Featuring deep AI integration utilizing Groq's high-speed inference layer, this editor natively supports intelligent code completion, an interactive AI coding assistant, and instant preview rendering.
 
 ---
 
-## 🧱 Tech Stack
+## 🏗 System Architecture
 
-| Layer         | Technology                                   |
-|---------------|----------------------------------------------|
-| Framework     | Next.js 15 (App Router)                      |
-| Styling       | TailwindCSS, ShadCN UI                       |
-| Language      | TypeScript                                   |
-| Auth          | NextAuth (Google + GitHub OAuth)             |
-| Editor        | Monaco Editor                                |
-| AI Suggestion | Ollama (LLMs running locally via Docker)     |
-| Runtime       | WebContainers                                |
-| Terminal      | xterm.js                                     |
-| Database      | MongoDB (via DATABASE_URL)                   |
+### Frontend Layer
+- **Framework:** Next.js 16 (App Router) with Turbopack for lightning-fast local development and HMR.
+- **UI Library:** React 19 Client/Server components.
+- **Styling:** Tailwind CSS + Radix UI Primitives (ShadCN) providing a highly aesthetic, VSCode-like dark/light theme environment.
+- **Layout Engine:** `react-resizable-panels` drives the deeply customizable editor, terminal, and preview splits.
+- **Code Editor:** Monaco Editor (`@monaco-editor/react`) powers the central coding interface.
+- **Terminal Emulator:** `xterm.js` integrated seamlessly with WebContainer processes.
+
+### Execution Engine (Browser Native)
+- **WebContainers API:** The core infrastructure running Node.js natively inside a secure Cross-Origin isolated browser iframe. This allows the editor to run `npm install` and start live dev servers (`npm run dev`) client-side without relying on expensive remote docker containers.
+
+### Backend Layer
+- **Database ORM:** Prisma ORM.
+- **Database Provider:** MongoDB.
+- **Authentication:** NextAuth.js (Auth.js) configured with seamless Google and GitHub OAuth providers for secure session persistence.
+- **AI Intelligence:** Integrated with Groq (`groq/compound`) for blazing fast `<200ms` contextual AI autocomplete and chatbot capabilities.
 
 ---
 
-## 🛠️ Getting Started
+## 🧠 AI Integration
 
-### 1. Clone the Repo
+Chai Vibe integrates AI natively into the developer flow:
+1. **Intelligent Autocomplete:** As you type in the Monaco Editor, background requests are dispatched to Groq's APIs, analyzing the surrounding AST context (imports, functions, comments) and suggesting the next logical block of code.
+2. **Contextual Chat Assistant:** An integrated sidebar bot that understands the file you are actively viewing and assists with debugging, code generation, and architectural design.
 
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js > 18.x
+- MongoDB Instance
+- Groq API Key
+- OAuth Credentials (Google/GitHub)
+
+### 1. Clone & Install
 ```bash
-git clone https://github.com/your-username/vibecode-editor.git
-cd vibecode-editor
-````
-
-### 2. Install Dependencies
-
-```bash
+git clone https://github.com/realranjan/Ai-Vibe-Code-Editor.git
+cd Ai-Vibe-Code-Editor
 npm install
 ```
 
-### 3. Set Up Environment Variables
-
-Create a `.env.local` file using the template:
-
-```bash
-cp .env.example .env.local
-```
-
-Then, fill in your credentials:
-
+### 2. Configure Environment Variables
+Create a `.env.local` file in the root directory:
 ```env
-AUTH_SECRET=your_auth_secret
-AUTH_GOOGLE_ID=your_google_client_id
-AUTH_GOOGLE_SECRET=your_google_secret
-AUTH_GITHUB_ID=your_github_client_id
-AUTH_GITHUB_SECRET=your_github_secret
-DATABASE_URL=your_mongodb_connection_string
-NEXTAUTH_URL=http://localhost:3000
+DATABASE_URL="mongodb+srv://<auth>@<cluster>.mongodb.net/chai-vibe-editor"
+AUTH_SECRET="your-32-character-secret"
+
+# OAuth Providers
+AUTH_GITHUB_ID="your-github-id"
+AUTH_GITHUB_SECRET="your-github-secret"
+AUTH_GOOGLE_ID="your-google-id"
+AUTH_GOOGLE_SECRET="your-google-secret"
+
+# AI Inference Layer
+GROQ_API_KEY="your-groq-api-key"
 ```
 
-### 4. Start Local Ollama Model
-
-Make sure [Ollama](https://ollama.com/) and Docker are installed, then run:
-
+### 3. Initialize Prisma Database
 ```bash
-ollama run codellama
+npx prisma generate
+npx prisma db push
 ```
 
-Or use your preferred model that supports code generation.
-
-### 5. Run the Development Server
-
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
-
-Visit `http://localhost:3000` in your browser.
-
+Navigate to `http://localhost:3000`.
 
 ---
 
-## 🎯 Keyboard Shortcuts
+## 📂 WebContainer Template System
 
-* `Ctrl + Space` or `Double Enter`: Trigger AI suggestions
-* `Tab`: Accept AI suggestion
-* `/`: Open Command Palette (if implemented)
+The application dynamically bootstraps starter projects into the WebContainer filesystem. Templates are stored in the `/vibecode-starters` directory, heavily optimized and traced for serverless (Vercel) builds to ensure seamless deployment and instantaneous playground generation.
 
----
-
-
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 🙏 Acknowledgements
-
-* [Monaco Editor](https://microsoft.github.io/monaco-editor/)
-* [Ollama](https://ollama.com/) – for offline LLMs
-* [WebContainers](https://webcontainers.io/)
-* [xterm.js](https://xtermjs.org/)
-* [NextAuth.js](https://next-auth.js.org/)
-
-```
+Supported out-of-the-box starters:
+- React (Vite)
+- Next.js
+- Express (API)
+- Hono
+- Vue
+- Angular
