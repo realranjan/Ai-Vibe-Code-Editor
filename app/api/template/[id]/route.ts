@@ -46,7 +46,7 @@ const playground = await db.playground.findUnique({
   }
 
   try {
-    const inputPath = path.join(process.cwd() , templatePath);
+    const inputPath = path.join(process.cwd(), "vibecode-starters", templatePath);
     const outputFile = path.join(os.tmpdir() , `${templateKey}-${Date.now()}.json`);
 
     await saveTemplateStructureToJson(inputPath , outputFile);
