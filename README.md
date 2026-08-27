@@ -8,6 +8,30 @@ Featuring deep AI integration utilizing Groq's high-speed inference layer, this 
 
 ## 🏗 System Architecture
 
+```mermaid
+graph TD
+    Client[Client Browser]
+    
+    subgraph Browser Environment
+        React[React / Monaco Editor]
+        WC[WebContainers API]
+        React -->|File System Sync| WC
+        WC -->|Live Preview| BrowserIframe[Preview Iframe]
+    end
+
+    subgraph Backend Infrastructure
+        NextServer[Next.js API Server]
+        MongoDB[(MongoDB)]
+        Auth[NextAuth OAuth]
+        AI[Groq Inference Layer]
+    end
+
+    Client -->|HTTP/REST| NextServer
+    NextServer -->|Prisma ORM| MongoDB
+    NextServer -->|Authentication| Auth
+    NextServer -->|Code Completion & Chat| AI
+```
+
 ### Frontend Layer
 - **Framework:** Next.js 16 (App Router) with Turbopack for lightning-fast local development and HMR.
 - **UI Library:** React 19 Client/Server components.
