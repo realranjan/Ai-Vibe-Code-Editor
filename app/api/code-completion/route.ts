@@ -154,7 +154,9 @@ async function generateSuggestion(prompt: string): Promise<string> {
     });
 
     if (!response.ok) {
-      throw new Error(`AI service error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error("Groq API Error:", response.status, errorText);
+      throw new Error(`AI service error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();

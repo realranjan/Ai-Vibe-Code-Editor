@@ -40,10 +40,16 @@ Always provide clear, practical answers. Use proper code formatting when showing
       }),
     });
 
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Groq Chat API Error:", response.status, errorText);
+        throw new Error(`Groq API Error: ${response.status}`);
+    }
     const data = await response.json();
     const aiContent = data.choices?.[0]?.message?.content;
 
     if (!aiContent) {
+      console.error("Empty AI content. Full response:", JSON.stringify(data));
       throw new Error("No response from AI model");
     }
 
