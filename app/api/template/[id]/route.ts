@@ -5,6 +5,7 @@ import {
 import { db } from "@/lib/db";
 import { templatePaths } from "@/lib/template";
 import path from "path";
+import os from "os";
 import fs from "fs/promises";
 import { NextRequest } from "next/server";
 
@@ -46,7 +47,7 @@ const playground = await db.playground.findUnique({
 
   try {
     const inputPath = path.join(process.cwd() , templatePath);
-    const outputFile = path.join(process.cwd() , `output/${templateKey}.json`);
+    const outputFile = path.join(os.tmpdir() , `${templateKey}-${Date.now()}.json`);
 
     await saveTemplateStructureToJson(inputPath , outputFile);
     const result = await readTemplateStructureFromJson(outputFile);

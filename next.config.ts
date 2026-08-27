@@ -30,6 +30,9 @@ const nextConfig: NextConfig = {
     ];
   },
   reactStrictMode:false,
+  outputFileTracingIncludes: {
+    '/api/template/*': ['./vibecode-starters/**/*'],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
