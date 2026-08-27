@@ -30,9 +30,18 @@ export const useWebContainer = ({
 
     async function initializeWebContainer() {
       try {
-        if (!webcontainerPromise) {
-          webcontainerPromise = WebContainer.boot();
+        if (typeof window !== "undefined") {
+          // Attach to window to survive React Fast Refresh (HMR)
+          if (!(window as any)._webcontainerPromise) {
+            (window as any)._webcontainerPromise = WebContainer.boot();
+          }
+          webcontainerPromise = (window as any)._webcontainerPromise;
+        } else {
+          if (!webcontainerPromise) {
+            webcontainerPromise = WebContainer.boot();
+          }
         }
+        
         const webcontainerInstance = await webcontainerPromise;
 
         if (!mounted) return;
@@ -41,6 +50,7 @@ export const useWebContainer = ({
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to initialize WebContainer:", error);
+        if (typeof window !== "undefined") (window as any)._webcontainerPromise = null;
         webcontainerPromise = null; // allow retry
         if (mounted) {
           setError(
