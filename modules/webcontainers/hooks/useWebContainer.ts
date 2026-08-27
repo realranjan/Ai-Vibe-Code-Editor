@@ -15,6 +15,8 @@ interface UseWebContaierReturn {
   destory: () => void;
 }
 
+let webcontainerPromise: Promise<WebContainer> | null = null;
+
 export const useWebContainer = ({
   templateData,
 }: UseWebContainerProps): UseWebContaierReturn => {
@@ -28,7 +30,10 @@ export const useWebContainer = ({
 
     async function initializeWebContainer() {
       try {
-        const webcontainerInstance = await WebContainer.boot();
+        if (!webcontainerPromise) {
+          webcontainerPromise = WebContainer.boot();
+        }
+        const webcontainerInstance = await webcontainerPromise;
 
         if (!mounted) return;
 
@@ -36,6 +41,7 @@ export const useWebContainer = ({
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to initialize WebContainer:", error);
+        webcontainerPromise = null; // allow retry
         if (mounted) {
           setError(
             error instanceof Error
@@ -51,9 +57,8 @@ export const useWebContainer = ({
 
     return () => {
       mounted = false;
-      if (instance) {
-        instance.teardown();
-      }
+      // DO NOT call instance.teardown() here. WebContainers can only be booted once per page load.
+      // Calling teardown() permanently bricks the environment until the user hard refreshes.
     };
   }, []);
 
